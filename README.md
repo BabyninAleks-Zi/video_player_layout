@@ -3,7 +3,7 @@
 Статическая страница с кастомным видеоплеером на базе `Playable` и `jQuery`.
 Проект запускается через `livereload` и автоматически обновляет страницу при изменении `html/css/js`.
 
-<img width="1205" height="859" alt="image" src="https://github.com/user-attachments/assets/53c3e11c-0674-4f32-b719-361c3aed4441" />
+<img width="1032" height="802" alt="image" src="https://github.com/user-attachments/assets/eaadc0d1-3827-4718-a396-3c6f25c93eeb" />
 
 ## Опубликованный сайт
 
