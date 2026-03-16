@@ -142,6 +142,11 @@
       border: 3px solid #fff;
       border-radius: 50%;
       background: #ff0000;
+      opacity: 0;
+      transition: opacity 0.3s ease;
+    }
+    .player .viewing-progressbar:hover .viewing-progressbar-fill::after {
+      opacity: 1;
     }
   </style>
 </head>
