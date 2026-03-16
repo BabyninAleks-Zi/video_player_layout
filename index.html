@@ -10,29 +10,32 @@
   <style>
     body {
       min-height: 100vh;
-      background: #f5f7fb;
+      background: #f5f5f5;
+      margin: 0;
     }
 
     .player-shell {
-      max-width: 900px;
-      margin: 40px auto;
+      width: 806px;
+      margin: 6px auto 0;
     }
 
     #player {
-      width: 100%;
+      width: 806px;
     }
 
     .player-frame {
+      width: 806px;
       background: #0b0b0b;
-      border-radius: 12px;
+      border: 1px solid #cfcfcf;
+      border-radius: 0;
       overflow: hidden;
-      box-shadow: 0 0 30px rgba(0, 0, 0, 1.5);
+      box-shadow: none;
       display: flex;
       flex-direction: column;
     }
 
     .player-top-strip {
-      height: 92px;
+      height: 46px;
       background: #0b0b0b;
       flex: 0 0 auto;
     }
@@ -41,7 +44,7 @@
       position: relative;
       width: 100%;
       background: #000;
-      aspect-ratio: 16 / 9;
+      height: 468px;
     }
 
     .player-video-container {
@@ -60,26 +63,33 @@
     .player-controls {
       background: #0b0b0b;
       color: #fff;
-      padding: 12px;
+      height: 85px;
+      padding: 0 10px 10px;
       flex: 0 0 auto;
+      display: flex;
+      align-items: flex-end;
     }
 
     .player-controls-row {
       display: flex;
       align-items: center;
-      gap: 8px;
+      gap: 19px;
       flex-wrap: nowrap;
+      width: 100%;
+      min-height: 14px;
     }
 
     .player-controls .btn {
-      border: 1px solid #3b3b3b;
-      background: #171717;
+      border: 0;
+      background: transparent;
       color: #fff;
+      padding: 0;
+      line-height: 1;
     }
 
     .player-controls .btn:hover,
     .player-controls .btn:focus {
-      background: #222;
+      background: transparent;
       color: #fff;
     }
 
@@ -92,32 +102,61 @@
       color: #fff;
     }
 
+    .player-controls .btn .fa {
+      font-size: 20px;
+    }
+
     .player-progress-track {
-      height: 8px;
+      height: 5px;
       cursor: pointer;
-      background: #3a3a3a;
+      background: transparent;
       border-radius: 999px;
-      overflow: hidden;
+      overflow: visible;
     }
 
     .player-progress {
       flex: 1;
-      min-width: 120px;
+      min-width: 80px;
+    }
+
+    .player-time-label {
+      color: #fff;
+      font-size: 17px;
+      line-height: 1;
+      white-space: nowrap;
+      min-width: 60px;
+      text-align: center;
     }
 
     .player-progress-fill {
+      position: relative;
       height: 100%;
       width: 0;
-      background: #ffd54a;
+      background: #ff0000;
+      border-radius: 999px;
+      color: transparent;
+      font-size: 0;
+      line-height: 0;
+    }
+
+    .player-progress-fill::after {
+      content: "";
+      position: absolute;
+      top: 50%;
+      right: -7px;
+      width: 14px;
+      height: 14px;
+      transform: translateY(-50%);
+      border-radius: 50%;
+      background: #ff0000;
+      border: 3px solid #ffffff;
     }
 
   </style>
 </head>
 <body>
-  <main class="container player-shell">
-    <h1 class="h3 mb-3">Видеоплеер</h1>
-
-    <div id="player" class="mb-3">
+  <main class="player-shell">
+    <div id="player">
       <div class="player-frame">
         <div class="player-top-strip"></div>
 
@@ -128,7 +167,7 @@
         </div>
 
         <div class="player-controls">
-          <div class="player-controls-row mb-2">
+          <div class="player-controls-row">
             <button class="btn btn--transparent js-play-button" type="button">
               <i class="fa fa-play" aria-hidden="true"></i>
             </button>
@@ -142,9 +181,11 @@
               <i class="fa fa-volume-up" aria-hidden="true"></i>
             </button>
 
+            <span class="js-current-time player-time-label">00:00</span>
             <div class="js-progress player-progress player-progress-track">
-              <div class="js-progress-slider player-progress-fill">progress</div>
+              <div class="js-progress-slider player-progress-fill"></div>
             </div>
+            <span class="js-duration player-time-label">00:00</span>
 
             <button class="btn btn--transparent js-fullscreen-button" type="button">
               <i class="fa fa-expand" aria-hidden="true"></i>
