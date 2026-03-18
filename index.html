@@ -8,98 +8,73 @@
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400&display=swap" rel="stylesheet">
   <link rel="icon" type="image/svg+xml" href="./media/player-favicon.svg">
-  <link rel="stylesheet" href="./static/bootstrap.min.css">
   <link rel="stylesheet" href="./static/font-awesome.min.css">
   <style>
+    * {
+      box-sizing: border-box;
+    }
+
     body {
-      min-height: 100vh;
       margin: 0;
+      min-height: 100vh;
+      display: flex;
+      align-items: center;
+      justify-content: center;
       background: #f5f5f5;
     }
 
-    .player-shell {
-      width: 806px;
-      margin: 6px auto 0;
-    }
-
     .player {
-      width: 806px;
-    }
-
-    .player .player-frame {
-      width: 806px;
+      width: 800px;
+      height: 600px;
       display: flex;
       flex-direction: column;
-      overflow: hidden;
-      border: 1px solid #cfcfcf;
       background: #0b0b0b;
+      box-shadow: 0px 0px 24px rgba(0, 0, 0, 1);
     }
 
-    .player .screen {
-      position: relative;
-      width: 100%;
-      height: 514px;
-      background: #0b0b0b;
-    }
-
-    .player .player-video-content {
-      position: absolute;
-      left: 0;
-      bottom: 0;
-      width: 100%;
-      height: 468px;
+    .player__screen {
+      flex-grow: 1;
+      min-height: 0;
       background: #000;
     }
 
-    .player .bottom-controls {
-      display: flex;
-      align-items: flex-end;
-      flex-wrap: nowrap;
-      gap: 14px;
-      height: 90px;
-      padding: 0 10px 10px;
-      background: #0b0b0b;
-    }
-
-    .player .left-buttons,
-    .player .right-buttons {
+    .player__controls {
+      padding: 0;
       display: flex;
       align-items: center;
-      gap: 19px;
-      flex: 0 0 auto;
-      min-height: 30px;
+      gap: 1px;
+      background: #000;
     }
 
-    .player .viewing-panel {
-      display: flex;
-      align-items: center;
-      gap: 8px;
-      flex: 1;
-      min-width: 0;
-      min-height: 30px;
-    }
-
-    .player .player-button {
+    .player__button {
       padding: 0;
       border: 0;
       line-height: 1;
       color: #fff;
       cursor: pointer;
       background: transparent;
+      width: 35px;
+      height: 35px;
+      position: relative;
+      top: -2px;
     }
 
-    .player .player-button:hover,
-    .player .player-button:focus-visible {
+    .player__button:hover,
+    .player__button:focus-visible {
       color: #fff;
       background: transparent;
     }
 
-    .player .player-button .fa {
+    .player__button:focus-visible {
+      outline: 2px solid #0d6efd;
+      outline-offset: 2px;
+    }
+
+    .player__button .fa {
       font-size: 20px;
     }
 
-    .player .viewing-time,
-    .player .video-duration {
+    .player__time {
       min-width: 60px;
       color: #fff;
       text-align: center;
@@ -108,19 +83,23 @@
       font-size: 16px;
       font-weight: 400;
       line-height: 1;
+      position: relative;
+      top: -1px;
     }
 
-    .player .viewing-progressbar {
+    .player__progress {
       flex: 1;
       min-width: 80px;
       height: 5px;
+      position: relative;
+      top: -1px;
       cursor: pointer;
       overflow: visible;
       border-radius: 999px;
       background: transparent;
     }
 
-    .player .viewing-progressbar-fill {
+    .player__progress-fill {
       position: relative;
       width: 0;
       height: 100%;
@@ -131,7 +110,7 @@
       background: #ff0000;
     }
 
-    .player .viewing-progressbar-fill::after {
+    .player__progress-fill::after {
       content: "";
       position: absolute;
       top: 50%;
@@ -145,57 +124,42 @@
       opacity: 0;
       transition: opacity 0.3s ease;
     }
-    .player .viewing-progressbar:hover .viewing-progressbar-fill::after {
+
+    .player__progress:hover .player__progress-fill::after {
       opacity: 1;
     }
   </style>
 </head>
-<body>
-  <main class="player-shell">
-    <div id="player" class="player">
-      <div class="player-frame">
-        <div class="screen">
-          <div class="js-video-container player-video-content"></div>
-        </div>
-
-        <div class="bottom-controls">
-          <div class="left-buttons">
-            <button class="player-button play js-play-button" type="button">
-              <i class="fa fa-play" aria-hidden="true"></i>
-            </button>
-            <button class="player-button play js-pause-button" type="button" hidden>
-              <i class="fa fa-pause" aria-hidden="true"></i>
-            </button>
-            <button class="player-button volume js-volume-button" type="button">
-              <i class="fa fa-volume-off" aria-hidden="true"></i>
-            </button>
-            <button class="player-button volume js-mute-button" type="button" hidden>
-              <i class="fa fa-volume-up" aria-hidden="true"></i>
-            </button>
-          </div>
-
-          <div class="viewing-panel">
-            <span class="js-current-time viewing-time">00:00</span>
-            <div class="js-progress viewing-progressbar">
-              <div class="js-progress-slider viewing-progressbar-fill"></div>
-            </div>
-            <span class="js-duration video-duration">00:00</span>
-          </div>
-
-          <div class="right-buttons">
-            <button class="player-button fullscreen js-fullscreen-button" type="button">
-              <i class="fa fa-expand" aria-hidden="true"></i>
-            </button>
-          </div>
-        </div>
+  <body>
+  <div id="player" class="player">
+    <div class="js-video-container player__screen"></div>
+    <div class="player__controls">
+      <button class="player__button player__button_type_play js-play-button" type="button">
+        <i class="fa fa-play" aria-hidden="true"></i>
+      </button>
+      <button class="player__button player__button_type_pause js-pause-button" type="button" hidden>
+        <i class="fa fa-pause" aria-hidden="true"></i>
+      </button>
+      <button class="player__button player__button_type_volume js-volume-button" type="button">
+        <i class="fa fa-volume-off" aria-hidden="true"></i>
+      </button>
+      <button class="player__button player__button_type_mute js-mute-button" type="button" hidden>
+        <i class="fa fa-volume-up" aria-hidden="true"></i>
+      </button>
+      <span class="js-current-time player__time">00:00</span>
+      <div class="js-progress player__progress">
+        <div class="js-progress-slider player__progress-fill"></div>
       </div>
+      <span class="js-duration player__time">00:00</span>
+      <button class="player__button player__button_type_fullscreen js-fullscreen-button" type="button">
+        <i class="fa fa-expand" aria-hidden="true"></i>
+      </button>
     </div>
-  </main>
+  </div>
 
   <script src="https://code.jquery.com/jquery-3.4.1.min.js"></script>
   <script src="https://unpkg.com/playable@2.10.3/dist/statics/playable.bundle.min.js"></script>
   <script src="./static/player.js"></script>
-  <script src="./static/bootstrap.bundle.min.js"></script>
   <script>
     createPlayer({
       elementId: 'player',
